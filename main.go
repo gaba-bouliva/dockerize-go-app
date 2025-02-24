@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -12,10 +13,13 @@ func main() {
 
 	m.HandleFunc("/", handlePage)
 
-	const addr = ":8080"
+	addr := os.Getenv("PORT")
+	if len(addr) < 2 {
+		panic("invalid port")
+	}
 	srv := http.Server{
 		Handler:      m,
-		Addr:         addr,
+		Addr:         ":" + addr,
 		WriteTimeout: 30 * time.Second,
 		ReadTimeout:  30 * time.Second,
 	}
